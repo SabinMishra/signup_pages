@@ -19,10 +19,12 @@
                     <v-form lazy-validation>
                       <v-text-field
                         label="Email"
-                        class="mt-11 font-weight-black inputs"
+                        class="mt-11 inputs"
                         :rules="emailRules"
                         v-model.lazy="email"
                         prepend-icon="email"
+                        v-on:blur="validate1"
+                        
                       ></v-text-field>
 
                       <v-text-field
@@ -33,6 +35,7 @@
                         class="mt-10 "
                         v-model.lazy="p1"
                         prepend-icon="fas fa-lock "
+                        v-on:blur="validate2"
                         @click:append="show = !show"
                       >
                       </v-text-field>
@@ -47,26 +50,61 @@
                         prepend-icon="fas fa-lock "
                         @click:append="show = !show"
                         class="mt-10 "
+                        v-on:blur="validate3"
                       >
                       </v-text-field>
 
-                      <div class="text-center">
-                        <v-btn
-                          text
-                          class="mt-6 "
-                          @click="submit"
-                          >Submit</v-btn
-                        >
-                      </div>
+                      
                     </v-form>
                   </v-card-text>
                 </v-col>
 
                 <v-col cols="12" md="6" sm="6" class="d-sm-none d-md-flex">
                   <v-img src="../assets/background1.jpg" class="my-n3">
-                    <div class="mt-10">
+                    <div class="tick-mark">
                       <svg
-                      v-show="shows"
+                      v-show="shows1"
+                      class="checkmark"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 52 52"
+                    >
+                      <circle
+                        class="checkmark__circle"
+                        cx="26"
+                        cy="26"
+                        r="25"
+                        fill="none"
+                      />
+                      <path
+                        class="checkmark__check"
+                        fill="none"
+                        d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                      />
+                    </svg>
+                    
+                    <svg
+                      v-show="shows2"
+                      class="checkmark"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 52 52"
+                    >
+                      <circle
+                        class="checkmark__circle"
+                        cx="26"
+                        cy="26"
+                        r="25"
+                        fill="none"
+                      />
+                      <path
+                        class="checkmark__check"
+                        fill="none"
+                        d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                      />
+                    </svg>
+                   
+                    <div>
+                    <svg
+                      v-show="shows3"
                       class="checkmark"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 52 52"
@@ -85,6 +123,18 @@
                       />
                     </svg>
                     </div>
+                    </div>
+                    <v-form>
+                      <div class="text-center">
+                        <v-btn 
+                        v-show="showBtn"
+                          outlined
+                          class="mt-6 "
+                          @click="submit"
+                          >Submit</v-btn
+                        >
+                      </div>
+                    </v-form>
                     
                   </v-img>
                 </v-col>
@@ -101,7 +151,11 @@
 export default {
   data() {
     return {
-      shows: false,
+      
+      shows1:false,
+      shows2:false,
+      shows3:false,
+      showBtn:false,
       email: "",
       p1: "",
       p2: "",
@@ -114,18 +168,36 @@ export default {
   },
   methods: {
     submit() {
-      this.shows = true;
+     this.shows = true
+      
     },
+    validate1(){
+      
+      const x =  /.+@.+\..+/.test(this.email);
+      console.log(x)
+      this.shows1 = x===true? true:false;
+
+
+    },
+    validate2(){
+      this.shows2 = this.p1.length>6? true:false;
+    },
+    validate3(){
+      if(this.p2.length>3)
+      this.shows3 = this.p1===this.p2? true:false;
+
+      if(this.shows1 && this.shows2 && this.shows3 === true){
+        this.showBtn = true;
+      }
+    }
+    
   },
-  watch: {
-    //  if(this.email.length>1){
-    //    this.status = 'ok'
-    //  }
-  },
+  
   computed: {
     passwordCompare() {
       return () => this.p1 === this.p2;
-    },
+    }
+    
   },
 };
 </script>
@@ -136,21 +208,22 @@ export default {
   stroke-dashoffset: 166;
   stroke-width: 2;
   stroke-miterlimit: 10;
-  stroke: #7ac142;
+  stroke: #334d4d;
   fill: none;
   animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  position:fixed;
 }
 
 .checkmark {
-  width: 56px;
-  height: 56px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   display: block;
   stroke-width: 2;
   stroke: #fff;
   stroke-miterlimit: 10;
-  margin: 10% auto;
-  box-shadow: inset 0px 0px 0px #7ac142;
+  margin: 7% auto;
+  box-shadow: inset 0px 0px 0px #adadeb;
   animation: fill 0.4s ease-in-out 0.4s forwards,
     scale 0.3s ease-in-out 0.9s both;
 }
@@ -178,7 +251,15 @@ export default {
 }
 @keyframes fill {
   100% {
-    box-shadow: inset 0px 0px 0px 30px #7ac142;
+    box-shadow: inset 0px 0px 0px 30px 
+ #75a3a3;
   }
 }
+
+.tick-mark{
+  margin-top:110px;
+  margin-left:-250px;
+}
+
+
 </style>
